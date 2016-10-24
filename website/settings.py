@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.admindocs',
     'website',
+    'infoscreen',
     'applications',
     'news',
     'door',

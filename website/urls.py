@@ -30,6 +30,8 @@ urlpatterns = [
     url(r'^groups/', include('committees.urls', namespace='verv')),
     url(r'^chaining/', include('smart_selects.urls')),
     url(r'^rpi/', include('rpi.urls')),
+    url(r'^infoscreen/', include('infoscreen.urls')),
+
 ]
 
 if settings.DEBUG:
