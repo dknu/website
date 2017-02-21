@@ -1,0 +1,18 @@
+    #vakt{
+            display: flex;
+            justify-content: center;
+        }
+    .vaktnavn{
+        text-align: center;
+    }
+    .card-container{
+        width: 25%;
+        margin: 20px;
+    }
+    h3{
+        text-align: center;
+    }
+    .spotlight{
+        display: flex;
+        justify-content: ;
+    }
