@@ -41,20 +41,82 @@
 
     <h3>Vaktliste</h3>
 <div id="vakt">
+    {% if vakter|length == 2 %}
+    <div class="card-container">
+        <div class="col s12 m6 l4">
+            <div class="card medium">
+                <div class="card-image waves-effect waves-block waves-light">
+                    <a class="img-a">
+                        <img class="vaktbilde" src=/media/{{ vakter.0.image }}>
+                    </a>
+                </div>
+                <div class="card-content">
+                    <div class="top">
+                        <div class=center>
+                            <div class="card-title vaktnavn">
+                                {{ vakter.0 }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="card-container">
+        <div class="col s12 m6 l4">
+            <div class="card medium">
+                <div class="card-image waves-effect waves-block waves-light">
+                    <a class="img-a">
+                        <img class="vaktbilde"
+                             src="https://lh5.googleusercontent.com/htVa4e_b_I67obwTrjOusAJD2SXA0JD38PGX3AkK7oPdTTWX9d1fGBMV1B4b5B35KZG-5d6WHhIfP4c=w1596-h764">
+                    </a>
+                </div>
+                <div class="card-content">
+                    <div class="top">
+                        <div class=center>
+                            <div class="card-title vaktnavn">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="card-container">
+        <div class="col s12 m6 l4">
+            <div class="card medium">
+                <div class="card-image waves-effect waves-block waves-light">
+                    <a class="img-a">
+                        <img class="vaktbilde" src=/media/{{ vakter.1.image }}>
+                    </a>
+                </div>
+                <div class="card-content">
+                    <div class="top">
+                        <div class=center>
+                            <div class="card-title vaktnavn">
+                                {{ vakter.1 }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% else %}
+    {% for vakt in vakter %}
     <div class="card-container">
       <div class="col s12 m6 l4">
-        <div class="card small">
+          <div class="card medium">
           <div class="card-image waves-effect waves-block waves-light">
-            <a class="img-a" href="/news/event/{{ news.id }}/">
-              <img class="vaktbilde" src="https://pbs.twimg.com/media/Br5KCKPCYAACqwX.jpg">
+              <a class="img-a">
+                  <img class="vaktbilde" src=/media/{{ vakt.image }}>
             </a>
           </div>
           <div class="card-content">
             <div class="top">
               <div class=center>
                 <div class="card-title vaktnavn">
-                  Navn Etternavn
-                  <a href="{{ news.place_href }}" target="_blank">{{ news.place }}</a>
+                    {{ vakt }}
                 </div>
               </div>
             </div>
@@ -62,48 +124,8 @@
         </div>
       </div>
     </div>
-<div class="card-container">
-      <div class="col s12 m6 l4">
-        <div class="card small">
-          <div class="card-image waves-effect waves-block waves-light">
-            <a class="img-a" href="/news/event/{{ news.id }}/">
-              <img class="vaktbilde" src="https://pbs.twimg.com/media/Br5KCKPCYAACqwX.jpg">
-            </a>
-          </div>
-          <div class="card-content">
-            <div class="top">
-              <div class=center>
-                <div class="card-title vaktnavn">
-                  Navn Etternavn
-                  <a href="{{ news.place_href }}" target="_blank">{{ news.place }}</a>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-<div class="card-container">
-      <div class="col s12 m6 l4">
-        <div class="card small">
-          <div class="card-image waves-effect waves-block waves-light">
-            <a class="img-a" href="/news/event/{{ news.id }}/">
-              <img class="vaktbilde" src="https://pbs.twimg.com/media/Br5KCKPCYAACqwX.jpg">
-            </a>
-          </div>
-          <div class="card-content">
-            <div class="top">
-              <div class=center>
-                <div class="card-title vaktnavn">
-                  Navn Etternavn
-                  <a href="{{ news.place_href }}" target="_blank">{{ news.place }}</a>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+    {% endfor %}
+    {% endif %}
 </div>
 {% endblock content %}
 
