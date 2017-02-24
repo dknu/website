@@ -70,6 +70,7 @@ INSTALLED_APPS = [
     'dal_select2',
     'material',
     'rpi',
+    'userprofile'
 ]
 
 #################################
