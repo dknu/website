@@ -22,10 +22,10 @@
         justify-content: center;
     }
     #left-flex{
-        width:65%;
+        flex-grow:3;
     }
     #right-flex{
-        width:35%;
+        flex-grow:1;
     }
     #info, #arrangementer, #raspberryliste,#misc,#spotlight{
         border: black 1px solid;
