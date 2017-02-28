@@ -1,6 +1,8 @@
     #vakt,#uber-flex{
             display: flex;
-            justify-content: center;
+            justify-content: space-between;
+            width:80%;
+            margin:auto;
         }
     .vaktnavn{
         text-align: center;
@@ -23,16 +25,18 @@
     }
     #left-flex{
         flex-grow:3;
+        margin-right:20px;
     }
     #right-flex{
         flex-grow:1;
     }
     #info, #arrangementer, #raspberryliste,#misc,#spotlight{
-        border: black 1px solid;
+        margin: 10px;
         width:100%;
         min-height:100px;
         display: inline-block;
         flex-grow: 1;
+        background:white;
     }
     .card.adjust{
         display:inline-block;
