@@ -1,5 +1,8 @@
-from django.db import models
+import datetime
+from calendar import MONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY
+
 from django.contrib.auth.admin import User
+from django.db import models
 
 
 class Skill(models.Model):
@@ -18,12 +21,6 @@ class Group(models.Model):
 
 
 class DutyTime(models.Model):
-    MONDAY = 'MA'
-    TUESDAY = 'TU'
-    WEDNESDAY = 'WE'
-    THURSDAY = 'TH'
-    FRIDAY = 'FR'
-
     DUTYDAYS_CHOICES = (
         (MONDAY, 'Mandag'),
         (TUESDAY, 'Tirsdag'),
@@ -31,13 +28,15 @@ class DutyTime(models.Model):
         (THURSDAY, 'Torsdag'),
         (FRIDAY, 'Fredag')
     )
+    t0 = datetime.datetime(year=1, month=1, day=1, hour=12, minute=15)
+    t1 = t0 + datetime.timedelta(hours=2)
 
-    day = models.CharField(max_length=2, choices=DUTYDAYS_CHOICES, default=MONDAY)
-    start_time = models.TimeField()
-    end_time = models.TimeField()
+    day = models.IntegerField(choices=DUTYDAYS_CHOICES, default=MONDAY, blank=False, null=False)
+    start_time = models.TimeField(default=t0.time(), blank=False, null=False)
+    end_time = models.TimeField(default=t1.time(), blank=False, null=False)
 
     def __str__(self):
-        return self.day + " " + str(self.start_time) + "-" + str(self.end_time)
+        return '{} {:%H:%M} - {:%H:%M}'.format(self.get_day_display(), self.start_time, self.end_time)
 
 
 class Profile(models.Model):
@@ -47,7 +46,11 @@ class Profile(models.Model):
     access_card = models.CharField(max_length=20, null=True, blank=True)
     skills = models.ManyToManyField(Skill)
     study = models.TextField(null=True, blank=True)
-    dutytime = models.ManyToManyField(DutyTime)
+    dutytime = models.ManyToManyField(DutyTime, related_name='profiles')
 
     def __str__(self):
-        return self.user.first_name + " " + self.user.last_name
+        return str(self.user)
+
+    @classmethod
+    def get_profiles_for_dutytime(cls, day, time):
+        return cls.objects.filter(dutytime__day=day, dutytime__start_time__lte=time, dutytime__end_time__gt=time)
