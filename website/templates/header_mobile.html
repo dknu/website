@@ -3,13 +3,16 @@
     <div id="navbar">
         <a href="/"><img id="logo" src="{% static "img/logo_header.png" %}"/></a>
         <ul id="slide-out" class="side-nav">
+            <li><a href="/wiki">OM OSS</a></li>
+            <li><a href="/wiki">KALENDER</a></li>
+            <li><a href="/wiki">INVENTAR</a></li>
             <li><a href="/news/all">NYHETER</a></li>
             <li><a href="/wiki">WIKI</a></li>
             {% if request.user.is_authenticated %}
                 <li class="no-padding">
                     <ul class="collapsible collapsible-accordion">
                         <li>
-                            <a class="collapsible-header">PROFIL
+                            <a class="collapsible-header">{{ user.username.upper }}
                               <img id="ddicon" src="{% static "img/ic_arrow_drop_down.svg" %}">
                             </a>
                             <div class="collapsible-body">
@@ -22,7 +25,6 @@
                     </ul>
                 </li>
             {% else %}
-                <li><a href="/authentication/signup">REGISTRER</a></li>
                 <li><a href="/authentication/login">LOGG INN</a></li>
             {% endif %}
         </ul>
