@@ -1,20 +1,20 @@
-    #vakt,#uber-flex{
+    #on_duty,#uber-flex{
             display: flex;
             justify-content: space-between;
             width:80%;
             margin:auto;
         }
-    .vaktnavn{
+    .on_duty_name{
         text-align: center;
     }
-    #vakt .card-container{
+    #on_duty .card-container{
         width: 20%;
         margin: 20px;
     }
     h3{
         text-align: center;
     }
-    .vaktbilde{
+    .on_duty_img{
        height:80%;
        max-height:80%!important;
     }
@@ -30,7 +30,7 @@
     #right-flex{
         flex-grow:1;
     }
-    #info, #arrangementer, #raspberryliste,#misc,#spotlight{
+    #info, #events, #raspberry_list,#misc,#spotlight{
         margin: 10px;
         width:100%;
         min-height:100px;

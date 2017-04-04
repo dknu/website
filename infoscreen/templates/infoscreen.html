@@ -2,31 +2,32 @@
 {% load staticfiles %}
 
 {% block head %}
-<link rel="stylesheet" type="text/css" href={% static "css/card.css" %}>
-<link rel="stylesheet" type="text/css" href={% static "css/infoskjerm.css" %}>
-<meta charset="UTF-8">
-<title>Infoscreen</title>
+    <link rel="stylesheet" type="text/css" href={% static "css/card.css" %}>
+    <link rel="stylesheet" type="text/css" href={% static "css/infoscreen.css" %}>
+    <meta charset="UTF-8">
+    <title>Infoscreen</title>
 {% endblock head %}
 
 {% block content %}
-<div id="uber-flex">
-    <div id="left-flex">
-        <div id="spotlight">
-            <div class="card-container">
-                <div class="col s12 m6 l4">
-                    <div class="card adjust">
-                        <div class="card-image waves-effect waves-block waves-light">
-                            <a class="img-a" href="/news/event/{{ news.id }}/">
-                                <img class="spotlight"
-                                     src="http://www.arduino.org/media/k2/galleries/90/A000066-Arduino-Uno-TH-2tri.jpg">
-                            </a>
-                        </div>
-                        <div class="card-content">
-                            <div class="top">
-                                <div class=center>
-                                    <div class="card-title tingnavn">
-                                        Tittel
-                                        <a href="{{ news.place_href }}" target="_blank">{{ news.place }}</a>
+    <div id="uber-flex">
+        <div id="left-flex">
+            <div id="spotlight">
+                <div class="card-container">
+                    <div class="col s12 m6 l4">
+                        <div class="card adjust">
+                            <div class="card-image waves-effect waves-block waves-light">
+                                <a class="img-a" href="/news/event/{{ news.id }}/">
+                                    <img class="spotlight"
+                                         src="http://www.arduino.org/media/k2/galleries/90/A000066-Arduino-Uno-TH-2tri.jpg">
+                                </a>
+                            </div>
+                            <div class="card-content">
+                                <div class="top">
+                                    <div class=center>
+                                        <div class="card-title thingname">
+                                            Tittel
+                                            <a href="{{ news.place_href }}" target="_blank">{{ news.place }}</a>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -34,169 +35,170 @@
                     </div>
                 </div>
             </div>
+            <div id="misc">
+                <h1 style="text-align:center">MISC</h1>
+            </div>
         </div>
-        <div id="misc">
-            <h1 style="text-align:center">MISC</h1>
+        <div id="right-flex">
+            <div id="info">
+                <div class="card-container">
+                    <div class="col s12 m6 l4">
+                        <div class="card adjust">
+                            <div class="card-image waves-effect waves-block waves-light">
+                                <a class="img-a" href="/news/event/{{ news.id }}/">
+                                    <img class="spotlight"
+                                         src="http://www.arduino.org/media/k2/galleries/90/A000066-Arduino-Uno-TH-2tri.jpg">
+                                </a>
+                            </div>
+                            <div class="card-content">
+                                <div class="top">
+                                    <div class=center>
+                                        <div class="card-title thingname">
+                                            Dette er info
+                                        </div>
+                                        <div class="event-ingress">
+                                            (Not really)
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="events">
+                <div class="card-container">
+                    <div class="col s12 m6 l4">
+                        <div class="card adjust">
+                            <div class="card-image waves-effect waves-block waves-light">
+                                <a class="img-a" href="/news/event/{{ news.id }}/">
+                                    <img class="spotlight"
+                                         src="http://www.arduino.org/media/k2/galleries/90/A000066-Arduino-Uno-TH-2tri.jpg">
+                                </a>
+                            </div>
+                            <div class="card-content">
+                                <div class="top">
+                                    <div class=center>
+                                        <div class="card-title thingname">
+                                            Dette er et arrangement
+                                        </div>
+                                        <div class="event-ingress">
+                                            (Jeg lover)
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="raspberry_list">
+                <table>
+                    <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>IP</th>
+                    </tr>
+                    </thead>
+                    <tr>
+                        <td>Pi #1</td>
+                        <td>127.0.0.1</td>
+                    </tr>
+                    <tr>
+                        <td>Pi #2</td>
+                        <td>Your mom's house</td>
+                    </tr>
+                </table>
+            </div>
         </div>
     </div>
-    <div id="right-flex">
-        <div id="info">
-            <div class="card-container">
-                <div class="col s12 m6 l4">
-                    <div class="card adjust">
-                        <div class="card-image waves-effect waves-block waves-light">
-                            <a class="img-a" href="/news/event/{{ news.id }}/">
-                                <img class="spotlight"
-                                     src="http://www.arduino.org/media/k2/galleries/90/A000066-Arduino-Uno-TH-2tri.jpg">
-                            </a>
-                        </div>
-                        <div class="card-content">
-                            <div class="top">
-                                <div class=center>
-                                    <div class="card-title tingnavn">
-                                        Dette er info
-                                    </div>
-                                    <div class="event-ingress">
-                                        (Not really)
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div id="arrangementer">
-            <div class="card-container">
-                <div class="col s12 m6 l4">
-                    <div class="card adjust">
-                        <div class="card-image waves-effect waves-block waves-light">
-                            <a class="img-a" href="/news/event/{{ news.id }}/">
-                                <img class="spotlight"
-                                     src="http://www.arduino.org/media/k2/galleries/90/A000066-Arduino-Uno-TH-2tri.jpg">
-                            </a>
-                        </div>
-                        <div class="card-content">
-                            <div class="top">
-                                <div class=center>
-                                    <div class="card-title tingnavn">
-                                        Dette er et arrangement
-                                    </div>
-                                    <div class="event-ingress">
-                                        (Jeg lover)
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div id="raspberryliste">
-            <table>
-                <thead>
-                <td>Name</td>
-                <td>IP</td>
-                </thead>
-                <tr>
-                    <td>Pi #1</td>
-                    <td>127.0.0.1</td>
-                </tr>
-                <tr>
-                    <td>Pi #2</td>
-                    <td>Your mom's house</td>
-                </tr>
-            </table>
-        </div>
-    </div>
-</div>
 
-<h3>Vaktliste</h3>
-<div id="vakt">
-    {% if vakter|length == 2 %}
-    <div class="card-container">
-        <div class="col s12 m6 l4">
-            <div class="card medium">
-                <div class="vaktbilde card-image waves-effect waves-block waves-light">
-                    <a class="img-a">
-                        <img src=/media/{{ vakter.0.image }}>
-                    </a>
-                </div>
-                <div class="card-content">
-                    <div class="top">
-                        <div class=center>
-                            <div class="card-title vaktnavn">
-                                {{ vakter.0 }}
+    <h3>Vaktliste</h3>
+    <div id="on_duty">
+        {% if on_duty|length == 2 %}
+            <div class="card-container">
+                <div class="col s12 m6 l4">
+                    <div class="card medium">
+                        <div class="on_duty_img card-image waves-effect waves-block waves-light">
+                            <a class="img-a">
+                                <img src=/media/{{ on_duty.0.image }}>
+                            </a>
+                        </div>
+                        <div class="card-content">
+                            <div class="top">
+                                <div class=center>
+                                    <div class="card-title on_duty_name">
+                                        {{ on_duty.0 }}
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </div>
-    <div class="card-container">
-        <div class="col s12 m6 l4">
-            <div class="card medium">
-                <div class="vaktbilde card-image waves-effect waves-block waves-light">
-                    <a class="img-a">
-                        <img src={% static "img/Logo.png" %}>
-                    </a>
-                </div>
-                <div class="card-content">
-                    <div class="top">
-                        <div class=center>
-                            <div class="card-title vaktnavn">
+            <div class="card-container">
+                <div class="col s12 m6 l4">
+                    <div class="card medium">
+                        <div class="on_duty_img card-image waves-effect waves-block waves-light">
+                            <a class="img-a">
+                                <img src={% static "img/Logo.png" %}>
+                            </a>
+                        </div>
+                        <div class="card-content">
+                            <div class="top">
+                                <div class=center>
+                                    <div class="card-title on_duty_name">
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </div>
-    <div class="card-container">
-        <div class="col s12 m6 l4">
-            <div class="card medium">
-                <div class="vaktbilde card-image waves-effect waves-block waves-light">
-                    <a class="img-a">
-                        <img src=/media/{{ vakter.1.image }}>
-                    </a>
-                </div>
-                <div class="card-content">
-                    <div class="top">
-                        <div class=center>
-                            <div class="card-title vaktnavn">
-                                {{ vakter.1 }}
+            <div class="card-container">
+                <div class="col s12 m6 l4">
+                    <div class="card medium">
+                        <div class="on_duty_img card-image waves-effect waves-block waves-light">
+                            <a class="img-a">
+                                <img src=/media/{{ on_duty.1.image }}>
+                            </a>
+                        </div>
+                        <div class="card-content">
+                            <div class="top">
+                                <div class=center>
+                                    <div class="card-title on_duty_name">
+                                        {{ on_duty.1 }}
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </div>
-    {% else %}
-    {% for vakt in vakter %}
-    <div class="card-container">
-        <div class="col s12 m6 l4">
-            <div class="card medium">
-                <div class="vaktbilde card-image waves-effect waves-block waves-light">
-                    <a class="img-a">
-                        <img src=/media/{{ vakt.image }}>
-                    </a>
-                </div>
-                <div class="card-content">
-                    <div class="top">
-                        <div class=center>
-                            <div class="card-title vaktnavn">
-                                {{ vakt }}
+        {% else %}
+            {% for persons in on_duty %}
+                <div class="card-container">
+                    <div class="col s12 m6 l4">
+                        <div class="card medium">
+                            <div class="on_duty_img card-image waves-effect waves-block waves-light">
+                                <a class="img-a">
+                                    <img src=/media/{{ person.image }}>
+                                </a>
+                            </div>
+                            <div class="card-content">
+                                <div class="top">
+                                    <div class=center>
+                                        <div class="card-title on_duty_name">
+                                            {{ person }}
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        </div>
+            {% endfor %}
+        {% endif %}
     </div>
-    {% endfor %}
-    {% endif %}
-</div>
 {% endblock content %}
 

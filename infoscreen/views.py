@@ -3,5 +3,7 @@ from userprofile.models import Profile
 
 
 def infoscreen(request):
-    vakter = Profile.objects.all()[:2];
-    return render(request, 'infoscreen.html', {'vakter': vakter})
+    on_duty = Profile.objects.all()[:2];
+    return render(request, 'infoscreen.html', {'on_duty': on_duty})
+
+
