@@ -20,8 +20,10 @@
 </head>
 <body>
 <div id="flex">
-  {% include "header_desktop.html" %}
-  {% include "header_mobile.html" %}
+  {% block hackerspace_header %}
+    {% include "header_desktop.html" %}
+    {% include "header_mobile.html" %}
+  {% endblock hackerspace_header %}
   {% block header %}
   {% endblock header %}
     {% if messages %}
