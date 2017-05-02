@@ -32,7 +32,7 @@ urlpatterns = [
     url(r'^groups/', include('committees.urls', namespace='verv')),
     url(r'^chaining/', include('smart_selects.urls')),
     url(r'^rpi/', include('rpi.urls')),
-    url(r'^kalender/', calendar, name='calendar'),
+    url(r'^calendar/', calendar, name='calendar'),
     url(r'^about/$', about, name='about'),
     url(r'^s/', include('django.contrib.flatpages.urls')),
 ]
