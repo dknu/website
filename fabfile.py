@@ -44,7 +44,7 @@ def create_server(name='test'):
             create_certificate(name)
             update_server(name)
             with cd(root_folder + name + '/docker-services'):
-                run('docker-compose  up -d')
+                sudo('docker-compose  up -d')
 
 
 def update_nginx(name='test'):
