@@ -51,7 +51,7 @@ def create_server(name='test'):
 def update_nginx(name='test'):
     """ Update nginx config for the container. """
     with cd(root_folder + name):
-        sudo('python3 docker-services/nginx/nginx.py')
+        sudo('python3 docker-services/nginx/nginx.py %s' % name)
 
 
 def install_nginx():
