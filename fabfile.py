@@ -54,7 +54,8 @@ def update_nginx(name='test'):
         sudo('python3 docker-services/nginx/nginx.py %s' % name)
 
 def update_docker_compose(name='test'):
-    sudo('python3 docker-services/compose.py %s' % name)
+    with cd(root_folder + name + '/docker-services'):
+        sudo('python3 compose.py %s' % name)
 
 
 def install_nginx():
