@@ -44,7 +44,7 @@ def create_server(name='test'):
             create_certificate(name)
             update_server(name)
             with cd(root_folder + name + '/docker-services'):
-                run('docker-compose docker-compose.yml up -d')
+                run('docker-compose  up -d')
 
 
 def update_nginx(name='test'):
@@ -72,7 +72,7 @@ def update_server(name='test'):
 
 
 def delete_server(name='test'):
-    sudo('docker stop '+name)
+    sudo('docker rm $(docker stop $(docker ps -a -q --filter ancestor=%s --format="{{.ID}}"))' % name)
     sudo('docker rm')
     with cd(root_folder):
         sudo('rm -rf ' + name)
