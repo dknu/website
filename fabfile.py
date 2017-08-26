@@ -41,6 +41,7 @@ def create_server(name='test'):
                 sudo('git clone https://github.com/hackerspace-ntnu/website.git')
             sudo('cp ' + root_folder + '.env docker-services')
             update_nginx(name)
+            update_docker_compose(name)
             create_certificate(name)
             update_server(name)
             with cd(root_folder + name + '/docker-services'):
@@ -51,6 +52,9 @@ def update_nginx(name='test'):
     """ Update nginx config for the container. """
     with cd(root_folder + name):
         sudo('python3 docker-services/nginx/nginx.py %s' % name)
+
+def update_docker_compose(name='test'):
+    sudo('python3 docker-services/compose.py')
 
 
 def install_nginx():
@@ -76,4 +80,3 @@ def delete_server(name='test'):
     sudo('docker rm')
     with cd(root_folder):
         sudo('rm -rf ' + name)
-
