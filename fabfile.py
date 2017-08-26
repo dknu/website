@@ -4,11 +4,13 @@ from fabric.operations import sudo
 env.hosts = ['secrets.nsa.gov']
 root_folder = '/devops/containers/'
 
+
 def init():
     sudo('mkdir -p %s' % root_folder)
     sudo('touch %s/.env' % root_folder)
     install_nginx()
     install_letsencrypt()
+
 
 def install_letsencrypt():
     sudo('apt-get update')
@@ -19,6 +21,7 @@ def install_letsencrypt():
 
     sudo('openssl dhparam -out /etc/ssl/certs/dhparam.pem 2048')
 
+
 def create_certificate(subdomain, domains=('hackerspace-ntnu.no', 'hackerspace.idi.ntnu.no')):
     cert_domains = []
     for domain in domains:
@@ -26,6 +29,7 @@ def create_certificate(subdomain, domains=('hackerspace-ntnu.no', 'hackerspace.i
         cert_domains.append('www.%s.%s' % (subdomain, domain))
     cert_str = ''.join([' -d %s' % cert_domain for cert_domain in cert_domains])
     sudo('certbot certonly --webroot-path /var/www/html %s' % cert_str)
+
 
 def create_server(name='test'):
     with cd(root_folder):
@@ -37,12 +41,16 @@ def create_server(name='test'):
             sudo('cp ' + root_folder + '.env docker-services')
             update_nginx(name)
             create_certificate(name)
-            updateserver(name)
+            update_server(name)
             with cd(root_folder + name + '/docker-services'):
                 run('docker-compose docker-compose.yml up -d')
 
+
 def update_nginx(name='test'):
-    pass
+    """ Update nginx config for the container. """
+    with cd(root_folder + name):
+        sudo('python3 docker-services/nginx/nginx.py')
+
 
 def install_nginx():
     sudo('apt-get update')
@@ -51,9 +59,11 @@ def install_nginx():
     sudo("ufw allow 'Nginx Full'")
     sudo("ufw delete allow 'Nginx HTTP'")
 
+
 def update_server(name='test'):
     pass
 
+
 def delete_server(name='test'):
     with cd(root_folder):
-        sudo('rm -rf '+name)
+        sudo('rm -rf ' + name)
