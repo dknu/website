@@ -1,8 +1,7 @@
 from fabric.api import env, run, cd, abort
 from fabric.operations import sudo
 
-env.hosts = ['national.shitposting.agency']
-#env.hosts = ['ec2-18-194-15-120.eu-central-1.compute.amazonaws.com']
+env.hosts = ['ec2-18-194-15-120.eu-central-1.compute.amazonaws.com']
 root_folder = '/devops/containers/'
 
 
@@ -73,7 +72,7 @@ def update_server(name='test'):
 
 
 def delete_server(name='test'):
-    sudo('docker kill')
+    sudo('docker stop '+name)
     sudo('docker rm')
     with cd(root_folder):
         sudo('rm -rf ' + name)
