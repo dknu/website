@@ -17,9 +17,6 @@ def install_letsencrypt():
     sudo('apt-get update')
     sudo('apt-get install python-certbot-nginx ')
 
-    sudo("ufw allow 'Nginx Full'")
-    sudo("ufw delete allow 'Nginx HTTP'")
-
     sudo('openssl dhparam -out /etc/ssl/certs/dhparam.pem 2048')
 
 def create_certificate(subdomain, domains=('hackerspace-ntnu.no', 'hackerspace.idi.ntnu.no')):
@@ -48,7 +45,11 @@ def update_nginx(name='test'):
     pass
 
 def install_nginx():
-    pass
+    sudo('apt-get update')
+    sudo('apt-get install nginx')
+
+    sudo("ufw allow 'Nginx Full'")
+    sudo("ufw delete allow 'Nginx HTTP'")
 
 def update_server(name='test'):
     pass
