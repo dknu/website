@@ -72,5 +72,8 @@ def update_server(name='test'):
 
 
 def delete_server(name='test'):
+    sudo('docker kill')
+    sudo('docker rm')
     with cd(root_folder):
         sudo('rm -rf ' + name)
+
