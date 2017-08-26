@@ -8,6 +8,7 @@ def init():
     sudo('mkdir -p %s' % root_folder)
     sudo('touch %s/.env' % root_folder)
     install_nginx()
+    update_global_nginx()
     install_letsencrypt()
 
 def install_letsencrypt():
@@ -50,6 +51,12 @@ def install_nginx():
 
     sudo("ufw allow 'Nginx Full'")
     sudo("ufw delete allow 'Nginx HTTP'")
+
+def update_global_nginx():
+    with cd('/tmp'):
+        sudo('git clone https://github.com/hackerspace-ntnu/docker-services.git')
+        sudo('mv docker-services/nginx/templates/global /etc/nginx/sites-available/default')
+        sudo('rm -rf docker-services')
 
 def update_server(name='test'):
     pass
