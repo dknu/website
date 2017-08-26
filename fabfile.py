@@ -1,7 +1,8 @@
 from fabric.api import env, run, cd, abort
 from fabric.operations import sudo
 
-env.hosts = ['secrets.nsa.gov']
+env.hosts = ['national.shitposting.agency']
+#env.hosts = ['ec2-18-194-15-120.eu-central-1.compute.amazonaws.com']
 root_folder = '/devops/containers/'
 
 
