@@ -35,7 +35,8 @@ def create_server(name='test'):
         sudo('mkdir ' + name)
         with cd(root_folder + name):
             sudo('git clone https://github.com/hackerspace-ntnu/docker-services.git')
-            sudo('git clone https://github.com/hackerspace-ntnu/website.git')
+            with cd(root_folder + name + '/docker-services'):
+                sudo('git clone https://github.com/hackerspace-ntnu/website.git')
             sudo('cp ' + root_folder + '.env docker-services')
             update_nginx(name)
             create_certificate(name)
