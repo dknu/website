@@ -72,10 +72,22 @@ def update_global_nginx():
         sudo('mv docker-services/nginx/templates/global /etc/nginx/sites-available/default')
         sudo('rm -rf docker-services')
 
+# TODO: Check if works
 def update_server(name='test'):
-    pass
+    path = root_folder + name + '/website'
+    git_pull(path, branch)
+    migrations(path)
 
+def git_pull(path, branch='master'):
+    with cd(path):
+        sudo(f'git checkout {branch}', user='git')
+        sudo('git pull', user='git')
+        sudo(f'git reset --hard origin/{branch}', user='git')
 
+def migrations(path):
+    run('python manage.py makemigrations')
+    run('python manage.py migrate')
+		
 def delete_server(name='test'):
     sudo('docker rm $(docker stop $(docker ps -a -q --filter ancestor=%s --format="{{.ID}}"))' % name)
     sudo('docker rm')
