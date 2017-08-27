@@ -101,12 +101,10 @@ def migrations(path, name='test'):
         run('exit')
 		
 def delete_server(name='test'):
+    stop_server(name)
     with settings(warn_only=True):
-        sudo('docker stop %s' % (name+"_database"))
-        sudo('docker stop %s' % (name+"_proxy"))
-        sudo('docker stop %s' % (name+"_website"))
-    sudo('docker rm %s' % (name+"_database"))
-    sudo('docker rm %s' % (name+"_proxy"))
-    sudo('docker rm %s' % (name+"_website"))
+        sudo('docker rm %s' % (name+"_database"))
+        sudo('docker rm %s' % (name+"_proxy"))
+        sudo('docker rm %s' % (name+"_website"))
     with cd(root_folder):
         sudo('rm -rf ' + name)
