@@ -122,9 +122,9 @@ def create_server(name='test', port=8000):
             with cd(root_folder + name + '/docker-services'):
                 sudo('git clone https://github.com/hackerspace-ntnu/website.git')
             sudo('cp ' + root_folder + '.env docker-services')
+            create_certificate(name)
             update_nginx_container(name, port)
             update_docker_compose(name, port)
-            create_certificate(name)
             update_server(name)
             start_server(name)
 
