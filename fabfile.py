@@ -13,6 +13,7 @@ root_folder = '/devops/containers/'
 def init():
     sudo('mkdir -p %s' % root_folder)
     sudo('touch %s/.env' % root_folder)
+    sudo('adduser git')
     install_docker()
     install_nginx()
     update_nginx_80()
@@ -123,6 +124,7 @@ def create_server(name='test', port=8000):
             with cd(root_folder + name + '/docker-services'):
                 sudo('git clone https://github.com/hackerspace-ntnu/website.git')
             sudo('cp ' + root_folder + '.env docker-services')
+            sudo('chown -R git:git .')
             create_certificate(name)
             update_nginx_container(name, port)
             update_docker_compose(name, port)
