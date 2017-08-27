@@ -18,7 +18,7 @@ def init():
     update_nginx_80()
     install_letsencrypt()
     create_certificate('', domains)
-    update_nginx()
+    update_nginx_main()
 
 
 ######################
@@ -118,7 +118,7 @@ def create_server(name='test', port=8000):
             with cd(root_folder + name + '/docker-services'):
                 sudo('git clone https://github.com/hackerspace-ntnu/website.git')
             sudo('cp ' + root_folder + '.env docker-services')
-            update_nginx(name, port)
+            update_nginx_container(name, port)
             update_docker_compose(name, port)
             create_certificate(name)
             update_server(name)
