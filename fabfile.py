@@ -12,6 +12,15 @@ def init():
     update_global_nginx()
     install_letsencrypt()
 
+def start_server(name='test'):
+    with cd(root_folder + name + '/docker-services'):
+        sudo('docker-compose -p '+name+' up -d')
+
+def stop_server(name='test'):
+    with settings(warn_only=True):
+        sudo('docker stop %s' % (name+"_database"))
+        sudo('docker stop %s' % (name+"_website"))
+        sudo('docker stop %s' % (name+"_proxy"))
 
 def install_letsencrypt():
     sudo('apt-get update')
@@ -45,8 +54,7 @@ def create_server(name='test'):
             update_docker_compose(name)
             create_certificate(name)
             update_server(name)
-            with cd(root_folder + name + '/docker-services'):
-                sudo('docker-compose -p '+name+' up -d')
+            start_server(name)
 
 
 def update_nginx(name='test'):
@@ -88,7 +96,7 @@ def git_pull(path, branch='master'):
 def migrations(path, name='test'):
     with cd(path):
         run('docker exec -it %s_website bash' % name)
-	    run('cd %s' % path) 
+        run('cd %s' % path) 
         run('python manage.py makemigrations')
         run('python manage.py migrate')
         run('exit')
