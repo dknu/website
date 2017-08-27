@@ -93,7 +93,7 @@ def update_nginx_container(name='test', port=8000):
         server_names.append('%s.%s' % (name, domain))
         server_names.append('www.%s.%s' % (name, domain))
     with cd(root_folder + name):
-        sudo('python3 docker-services/nginx/nginx_container.py %s %s %s %r' % (' '.join(server_names), domains[0], name, port))
+        sudo('python3 docker-services/nginx/nginx_container.py %s %s %s %r' % ('__'.join(server_names), domains[0], name, port))
     sudo('systemctl restart nginx')
 
 
