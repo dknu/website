@@ -13,11 +13,21 @@ root_folder = '/devops/containers/'
 def init():
     sudo('mkdir -p %s' % root_folder)
     sudo('touch %s/.env' % root_folder)
+    install_docker()
     install_nginx()
-    update_nginx_min()
+    update_nginx_80()
     install_letsencrypt()
     create_certificate('', domains)
     update_nginx()
+
+
+######################
+###     DOCKER     ###
+######################
+
+def install_docker():
+    sudo('sudo curl -L https://github.com/docker/compose/releases/download/1.15.0/docker-compose-`uname -s`-`uname -m` -o /usr/local/bin/docker-compose')
+    sudo('sudo chmod +x /usr/local/bin/docker-compose')
 
 
 ######################
@@ -56,17 +66,31 @@ def install_nginx():
     sudo("ufw delete allow 'Nginx HTTP'")
 
 
-def update_nginx_min():
+def update_nginx_80():
     with cd('/tmp'):
         sudo('git clone https://github.com/hackerspace-ntnu/docker-services.git')
-        sudo('mv docker-services/nginx/templates/global_min /etc/nginx/sites-available/default')
+        sudo('mv docker-services/nginx/templates/outer_80.conf /etc/nginx/sites-available/default')
         sudo('rm -rf docker-services')
 
 
-def update_nginx(name='test', port=8000):
-    """ Update nginx config for the container. """
+def update_nginx_main():
+    with cd('/tmp'):
+        server_names = []
+        for domain in domains:
+            server_names.append(domain)
+            server_names.append('www.%s' % (domain))
+        sudo('git clone https://github.com/hackerspace-ntnu/docker-services.git')
+        sudo('python3 /tmp/docker-services/nginx/nginx_main.py %s %s' % (''.join(server_names), domains[0]))
+        sudo('rm -rf docker-services')
+
+
+def update_nginx_container(name='test', port=8000):
+    server_names = []
+    for domain in domains:
+        server_names.append('%s.%s' % (name, domain))
+        server_names.append('www.%s.%s' % (name, domain))
     with cd(root_folder + name):
-        sudo('python3 docker-services/nginx/nginx.py %s %r' % (name, port))
+        sudo('python3 docker-services/nginx/nginx_container.py %s %s %s %r' % (' '.join(server_names), domains[0], name, port))
 
 
 ######################
