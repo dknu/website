@@ -34,8 +34,9 @@ def create_certificate(subdomain, domains=('hackerspace-ntnu.no', 'hackerspace.i
 
 def create_server(name='test'):
     with cd(root_folder):
-        sudo('mkdir ' + name)
+        sudo('mkdir -p ' + name)
         with cd(root_folder + name):
+            sudo('rm -rf docker-services')
             sudo('git clone https://github.com/hackerspace-ntnu/docker-services.git')
             with cd(root_folder + name + '/docker-services'):
                 sudo('git clone https://github.com/hackerspace-ntnu/website.git')
@@ -44,7 +45,7 @@ def create_server(name='test'):
             create_certificate(name)
             update_server(name)
             with cd(root_folder + name + '/docker-services'):
-                sudo('docker-compose  up -d')
+                sudo('docker-compose -p %s up -d' % name)
 
 
 def update_nginx(name='test'):
