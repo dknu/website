@@ -82,7 +82,7 @@ def update_global_nginx():
         sudo('rm -rf docker-services')
 
 # TODO: Check if works
-def update_server(name='test'):
+def update_server(name='test', branch='master'):
     path = root_folder + name + '/docker-services/website'
     git_pull(path, branch)
     migrations(path, name)
