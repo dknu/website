@@ -80,7 +80,7 @@ def update_nginx_main():
             server_names.append(domain)
             server_names.append('www.%s' % (domain))
         sudo('git clone https://github.com/hackerspace-ntnu/docker-services.git')
-        sudo('python3 /tmp/docker-services/nginx/nginx_main.py %s %s' % (''.join(server_names), domains[0]))
+        sudo('python3 /tmp/docker-services/nginx/nginx_main.py %s %s' % ('__'.join(server_names), domains[0]))
         sudo('rm -rf docker-services')
 
 
