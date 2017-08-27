@@ -69,7 +69,8 @@ def install_nginx():
 def update_nginx_80():
     with cd('/tmp'):
         sudo('git clone https://github.com/hackerspace-ntnu/docker-services.git')
-        sudo('mv docker-services/nginx/templates/outer_80.conf /etc/nginx/sites-available/default')
+        sudo('mv docker-services/nginx/templates/outer_80.conf /etc/nginx/sites-enabled/main.conf')
+        sudo('rm -f /etc/nginx/sites-enabled/default')
         sudo('rm -rf docker-services')
 
 
