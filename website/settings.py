@@ -10,12 +10,12 @@ import sys
 #################################
 
 
-SECRET_KEY = 'SECRET_KEY'
+SECRET_KEY = os.environ['SECRET_KEY'] or 'SECRET_KEY'
 DB = 'sqlite'
-DEBUG = True
-ALLOWED_HOSTS = ['*']
-DOOR_KEY = 'DOOR_KEY'
-RPI_SECRET_KEY = 'RPI_SECRET_KEY'
+DEBUG = os.environ.get('DEBUG') or True
+ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS') or ['*']
+DOOR_KEY = os.environ.get('DOOR_KEY') or 'DOOR_KEY'
+RPI_SECRET_KEY = os.environ.get('RPI_SECRET_KEY') or 'RPI_SECRET_KEY'
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 ROOT_URLCONF = 'website.urls'
@@ -93,9 +93,9 @@ if DB == 'postgres':
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql_psycopg2',
-            'NAME': DATABASE_NAME,
-            'USER': DATABASE_USER,
-            'PASSWORD': DATABASE_PASSWORD,
+            'NAME': os.environ.get('POSTGRES_DB') or 'POSTGRES_DB',
+            'USER': os.environ.get('POSTGRES_USER') or 'POSTGRES_USER',
+            'PASSWORD': os.environ.get('POSTGRES_PASSWORD') or 'POSTGRES_PASSWORD',
             'HOST': 'localhost',
             'PORT': '',
         }

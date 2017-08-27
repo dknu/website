@@ -75,9 +75,9 @@ def update_global_nginx():
 
 # TODO: Check if works
 def update_server(name='test'):
-    path = root_folder + name + '/website'
+    path = root_folder + name + '/docker-services/website'
     git_pull(path, branch)
-    migrations(path)
+    migrations(path, name)
 
 def git_pull(path, branch='master'):
     with cd(path):
@@ -85,10 +85,13 @@ def git_pull(path, branch='master'):
         sudo('git pull', user='git')
         sudo('git reset --hard origin/%s' % branch, user='git')
 
-def migrations(path):
-    run('cd %s' % path) 
-    run('python manage.py makemigrations')
-    run('python manage.py migrate')
+def migrations(path, name='test'):
+    with cd(path):
+        run('docker exec -it %s_website bash' % name)
+	    run('cd %s' % path) 
+        run('python manage.py makemigrations')
+        run('python manage.py migrate')
+        run('exit')
 		
 def delete_server(name='test'):
     with settings(warn_only=True):
