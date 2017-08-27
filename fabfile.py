@@ -1,7 +1,7 @@
-from fabric.api import env, run, cd, abort
+from fabric.api import env, run, cd, abort, settings
 from fabric.operations import sudo
 
-env.hosts = ['ec2-18-194-15-120.eu-central-1.compute.amazonaws.com']
+env.hosts = ['82.196.4.126']
 root_folder = '/devops/containers/'
 
 
@@ -86,12 +86,17 @@ def git_pull(path, branch='master'):
         sudo('git reset --hard origin/%s' % branch, user='git')
 
 def migrations(path):
-	run('cd %s' % path) 
+    run('cd %s' % path) 
     run('python manage.py makemigrations')
     run('python manage.py migrate')
 		
 def delete_server(name='test'):
-    sudo('docker rm $(docker stop $(docker ps -a -q --filter ancestor=%s --format="{{.ID}}"))' % name)
-    sudo('docker rm')
+    with settings(warn_only=True):
+        sudo('docker stop %s' % (name+"_database"))
+        sudo('docker stop %s' % (name+"_proxy"))
+        sudo('docker stop %s' % (name+"_website"))
+    sudo('docker rm %s' % (name+"_database"))
+    sudo('docker rm %s' % (name+"_proxy"))
+    sudo('docker rm %s' % (name+"_website"))
     with cd(root_folder):
         sudo('rm -rf ' + name)
