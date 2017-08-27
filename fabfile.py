@@ -72,6 +72,7 @@ def update_nginx_80():
         sudo('mv docker-services/nginx/templates/outer_80.conf /etc/nginx/sites-enabled/main.conf')
         sudo('rm -f /etc/nginx/sites-enabled/default')
         sudo('rm -rf docker-services')
+        sudo('systemctl restart nginx')
 
 
 def update_nginx_main():
@@ -83,6 +84,7 @@ def update_nginx_main():
         sudo('git clone https://github.com/hackerspace-ntnu/docker-services.git')
         sudo('python3 /tmp/docker-services/nginx/nginx_main.py %s %s' % ('__'.join(server_names), domains[0]))
         sudo('rm -rf docker-services')
+        sudo('systemctl restart nginx')
 
 
 def update_nginx_container(name='test', port=8000):
@@ -92,6 +94,7 @@ def update_nginx_container(name='test', port=8000):
         server_names.append('www.%s.%s' % (name, domain))
     with cd(root_folder + name):
         sudo('python3 docker-services/nginx/nginx_container.py %s %s %s %r' % (' '.join(server_names), domains[0], name, port))
+    sudo('systemctl restart nginx')
 
 
 ######################
