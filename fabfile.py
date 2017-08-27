@@ -81,11 +81,12 @@ def update_server(name='test'):
 
 def git_pull(path, branch='master'):
     with cd(path):
-        sudo(f'git checkout {branch}', user='git')
+        sudo('git checkout %s' % branch, user='git')
         sudo('git pull', user='git')
-        sudo(f'git reset --hard origin/{branch}', user='git')
+        sudo('git reset --hard origin/%s' % branch, user='git')
 
 def migrations(path):
+	run('cd %s' % path) 
     run('python manage.py makemigrations')
     run('python manage.py migrate')
 		
