@@ -1,7 +1,8 @@
 from fabric.api import env, run, cd, abort, settings
 from fabric.operations import sudo
 
-env.hosts = ['82.196.4.126']
+env.hosts = ['progge.party']
+domains = ['progge.party'] #('hackerspace-ntnu.no', 'hackerspace.idi.ntnu.no')
 root_folder = '/devops/containers/'
 
 
@@ -32,7 +33,7 @@ def install_letsencrypt():
     sudo('openssl dhparam -out /etc/ssl/certs/dhparam.pem 2048')
 
 
-def create_certificate(subdomain, domains=('hackerspace-ntnu.no', 'hackerspace.idi.ntnu.no')):
+def create_certificate(subdomain, domains=domains):
     cert_domains = []
     for domain in domains:
         cert_domains.append('%s.%s' % (subdomain, domain))
@@ -41,7 +42,7 @@ def create_certificate(subdomain, domains=('hackerspace-ntnu.no', 'hackerspace.i
     sudo('certbot certonly --webroot-path /var/www/html %s' % cert_str)
 
 
-def create_server(name='test'):
+def create_server(name='test', port=8000):
     with cd(root_folder):
         sudo('mkdir -p ' + name)
         with cd(root_folder + name):
@@ -50,21 +51,21 @@ def create_server(name='test'):
             with cd(root_folder + name + '/docker-services'):
                 sudo('git clone https://github.com/hackerspace-ntnu/website.git')
             sudo('cp ' + root_folder + '.env docker-services')
-            update_nginx(name)
-            update_docker_compose(name)
+            update_nginx(name, port)
+            update_docker_compose(name, port)
             create_certificate(name)
             update_server(name)
             start_server(name)
 
 
-def update_nginx(name='test'):
+def update_nginx(name='test', port=8000):
     """ Update nginx config for the container. """
     with cd(root_folder + name):
-        sudo('python3 docker-services/nginx/nginx.py %s' % name)
+        sudo('python3 docker-services/nginx/nginx.py %s %r' % (name, port))
 
-def update_docker_compose(name='test'):
+def update_docker_compose(name='test', port=8000):
     with cd(root_folder + name + '/docker-services'):
-        sudo('python3 compose.py %s' % name)
+        sudo('python3 compose.py %s %r' % (name, port))
 
 
 def install_nginx():
@@ -82,7 +83,7 @@ def update_global_nginx():
         sudo('rm -rf docker-services')
 
 # TODO: Check if works
-def update_server(name='test'):
+def update_server(name='test', branch='master'):
     path = root_folder + name + '/docker-services/website'
     git_pull(path, branch)
     migrations(path, name)
@@ -99,7 +100,7 @@ def migrations(path, name='test'):
         run('python manage.py makemigrations')
         run('python manage.py migrate')
         run('exit')
-		
+
 def delete_server(name='test'):
     stop_server(name)
     with settings(warn_only=True):
