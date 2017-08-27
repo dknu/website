@@ -86,11 +86,12 @@ def git_pull(path, branch='master'):
         sudo('git reset --hard origin/%s' % branch, user='git')
 
 def migrations(path, name='test'):
-    run('docker exec -it %s_website bash' % name)
-	run('cd %s' % path) 
-    run('python manage.py makemigrations')
-    run('python manage.py migrate')
-    run('exit')
+    with cd(path):
+        run('docker exec -it %s_website bash' % name)
+	    run('cd %s' % path) 
+        run('python manage.py makemigrations')
+        run('python manage.py migrate')
+        run('exit')
 		
 def delete_server(name='test'):
     sudo('docker rm $(docker stop $(docker ps -a -q --filter ancestor=%s --format="{{.ID}}"))' % name)
