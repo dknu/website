@@ -42,16 +42,21 @@ def create_server(name='test'):
                 sudo('git clone https://github.com/hackerspace-ntnu/website.git')
             sudo('cp ' + root_folder + '.env docker-services')
             update_nginx(name)
+            update_docker_compose(name)
             create_certificate(name)
             update_server(name)
             with cd(root_folder + name + '/docker-services'):
-                sudo('docker-compose -p %s up -d' % name)
+                sudo('docker-compose -p '+name+' up -d')
 
 
 def update_nginx(name='test'):
     """ Update nginx config for the container. """
     with cd(root_folder + name):
         sudo('python3 docker-services/nginx/nginx.py %s' % name)
+
+def update_docker_compose(name='test'):
+    with cd(root_folder + name + '/docker-services'):
+        sudo('python3 compose.py %s' % name)
 
 
 def install_nginx():
@@ -68,13 +73,24 @@ def update_global_nginx():
         sudo('mv docker-services/nginx/templates/global /etc/nginx/sites-available/default')
         sudo('rm -rf docker-services')
 
+# TODO: Check if works
 def update_server(name='test'):
-    pass
+    path = root_folder + name + '/website'
+    git_pull(path, branch)
+    migrations(path)
 
+def git_pull(path, branch='master'):
+    with cd(path):
+        sudo(f'git checkout {branch}', user='git')
+        sudo('git pull', user='git')
+        sudo(f'git reset --hard origin/{branch}', user='git')
 
+def migrations(path):
+    run('python manage.py makemigrations')
+    run('python manage.py migrate')
+		
 def delete_server(name='test'):
     sudo('docker rm $(docker stop $(docker ps -a -q --filter ancestor=%s --format="{{.ID}}"))' % name)
     sudo('docker rm')
     with cd(root_folder):
         sudo('rm -rf ' + name)
-
