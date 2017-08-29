@@ -134,8 +134,8 @@ def create_server(name='test', port=8000):
             create_certificate(name)
             update_nginx_container(name, port)
             update_docker_compose(name, port)
-            update_server(name)
             start_server(name)
+            update_server(name)
 
 
 def delete_server(name='test'):
