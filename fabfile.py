@@ -173,7 +173,5 @@ def git_pull(path, branch='master'):
 
 def migrations(path, name='test'):
     with cd(path):
-        run('docker exec -it %s_website bash' % name)
-        run('python manage.py makemigrations')
-        run('python manage.py migrate')
-        run('exit')
+        sudo('docker exec -it %s_website python manage.py makemigrations' % name)
+        sudo('docker exec -it %s_website python manage.py migrate' % name)
