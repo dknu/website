@@ -173,7 +173,18 @@ def git_pull(path, branch='master'):
 
 def migrations(path, name='test'):
     with cd(path):
-        run('docker exec -it %s_website bash' % name)
-        run('python manage.py makemigrations')
-        run('python manage.py migrate')
-        run('exit')
+        sudo('docker exec -it %s_website bash' % name)
+        sudo('python manage.py makemigrations')
+        sudo('python manage.py migrate')
+        sudo('exit')
+		
+def delete_server(name='test'):
+    with settings(warn_only=True):
+        sudo('docker stop %s' % (name+"_database"))
+        sudo('docker stop %s' % (name+"_proxy"))
+        sudo('docker stop %s' % (name+"_website"))
+    sudo('docker rm %s' % (name+"_database"))
+    sudo('docker rm %s' % (name+"_proxy"))
+    sudo('docker rm %s' % (name+"_website"))
+    with cd(root_folder):
+        sudo('rm -rf ' + name)
