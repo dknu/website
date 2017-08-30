@@ -148,7 +148,6 @@ def delete_server(name='test'):
         sudo('rm -rf ' + name)
 
 
-# TODO: Check if works
 def update_server(name='test', branch='master'):
     path = root_folder + name + '/docker-services/website'
     git_pull(path, branch)
