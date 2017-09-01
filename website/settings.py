@@ -10,7 +10,7 @@ import sys
 #################################
 
 
-SECRET_KEY = os.environ['SECRET_KEY'] or 'SECRET_KEY'
+SECRET_KEY = os.environ.get('SECRET_KEY') or 'SECRET_KEY'
 DB = 'sqlite'
 DEBUG = os.environ.get('DEBUG') or True
 ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS') or ['*']
