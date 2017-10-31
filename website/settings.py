@@ -75,6 +75,7 @@ INSTALLED_APPS = [
     'material',
     'rpi',
     'inventory',
+    'printerqueue',
 ]
 
 
