@@ -35,7 +35,7 @@ urlpatterns = [
     url(r'^kalender/', calendar, name='calendar'),
     url(r'^about/$', about, name='about'),
     url(r'^s/', include('django.contrib.flatpages.urls')),
-    url(r'^queue/', include('printerqueue.urls')),
+    url(r'^queue/', include('printerqueue.urls'),name="printerqueue"),
 ]
 
 if settings.DEBUG:
