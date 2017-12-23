@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    {% for queue in queues %}
+        <ul>
+        {{ queue.name }}
+            {% for object in queue.objects %}
+                <li>
+                    {{ object }}
+                </li>
+            {% endfor %}
+        </ul>
+    {% endfor %}
+
+{% endblock content %}

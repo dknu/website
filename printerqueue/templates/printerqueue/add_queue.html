@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+{% block content %}
+    <div class="content col s8">
+        <form action="{% url 'printerqueue:create' %}" method="post">
+            {% csrf_token %}
+            <div class="input-field">
+                <input type="text" name="{{ form.name.html_name }}" id="{{ form.name.id_for_label }}" data-error="Required" required>
+                <label for="{{ form.name.id_for_label }}">{{ form.name.label }}</label>
+            </div>
+
+            <div class="input-field">
+                <textarea name="{{ form.description.html_name }}" id="{{ form.description.id_for_label }}" cols="30" rows="10">
+                </textarea>
+                <label for="{{ form.description.id_for_label }}">{{ form.description.label }}</label>
+            </div>
+
+            <div class="input-field">
+                <input type="time" name="{{ form.time_start.html_name }}" id="{{ form.time_start.id_for_label }}">
+                <label for="{{ form.time_start.id_for_label }}">{{ form.time_start.label }}</label>
+            </div>
+
+            <div class="input-field">
+                <input type="time" name="{{ form.time_end.html_name }}" id="{{ form.time_end.id_for_label }}">
+                <label for="{{ form.time_end.id_for_label }}">{{ form.time_end.label }}</label>
+            </div>
+
+            <div class="input-field">
+                <input type="checkbox" name="{{ form.include_file.html_name }}" id="{{ form.include_file.id_for_label }}">
+                <label for="{{ form.include_file.id_for_label }}">{{ form.include_file.label }}</label>
+            </div>
+
+            <div class="input-field">
+                <input type="checkbox" name="{{ form.include_description.html_name }}" id="{{ form.include_description.id_for_label }}">
+                <label for="{{ form.include_description.id_for_label }}">{{ form.include_description.label }}</label>
+            </div>
+
+            <div class="input-field">
+                <input type="checkbox" name="{{ form.hidden.html_name }}" id="{{ form.hidden.id_for_label }}">
+                <label for="{{ form.hidden.id_for_label }}">{{ form.hidden.label }}</label>
+            </div>
+
+            <div class="input-field">
+                <button type="submit" class="btn waves-effect waves-light">
+                    {{ button_message }}
+                </button>
+            </div>
+
+        </form>
+    </div>
+{%  endblock %}

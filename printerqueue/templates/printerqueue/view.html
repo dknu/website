@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h1>{{ name }}</h1>
+    <p>
+        {{ description }}
+    </p>
+
+    <ul>
+        {% for o in objects %}
+            <li>
+                {{ o }}
+            </li>
+        {% endfor %}
+    </ul>
+
+{% endblock content %}

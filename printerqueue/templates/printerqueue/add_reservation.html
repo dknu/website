@@ -1,0 +1,189 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block head %}
+    <link rel="stylesheet" href="{% static "printerqueue/css/style.css" %}">
+{% endblock head %}
+{% block content %}
+    <div class="content">
+        <form action="{% url 'printerqueue:add_to_queue' queue_id=qid %}" method="post" class="col s12" style="max-width: 1024px;margin: auto;">
+            {% csrf_token %}
+            
+            {% if include_description %}
+                <div class="input-field">
+                    <input type="text" name="{{ form.description.html_name }}" id="{{ form.description.id_for_label }}">
+                    <label for="{{ form.description.id_for_label }}">{{ form.description.label }}</label>
+                </div>
+            {% endif %}
+
+            {% if include_file %}
+                <div class="input-field">
+                    <input type="file" name="{{ form.file.html_name }}" id="{{ form.file.id_for_label }}">
+                    <label for="{{ form.file.id_for_label }}">{{ form.file.id_for_label }}</label>
+                </div>
+            {% endif %}
+
+            <div class="input-field">
+                <input type="date" name="{{ form.date.html_name }}" id="{{ form.date.id_for_label }}">
+               <!-- <label for="{{ form.date.id_for_label }}">{{ form.date.label }}</label> -->
+            </div>
+
+            <div class="row">
+                <p>Start</p>
+                <div class="input-field queue-time-select">
+                    <select name="{{ form.start_h.html_name }}" id="{{ form.start_h.id_for_label }}" style="display: inline-block">
+                        <option value="" selected disabled>--</option>
+                    </select>
+                </div>
+
+                <p class="queue-time-separator"><b>&colon;</b></p>
+
+                <div class="input-field queue-time-select">
+                    <select name="{{ form.start_m.html_name }}" id="{{ form.start_m.id_for_label }}" style="display:inline-block">
+                        <option value="" selected disabled>--</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="row">
+                <p>End</p>
+                <div class="input-field queue-time-select">
+                    <select name="{{ form.end_h.html_name }}" id="{{ form.end_h.id_for_label }}">
+                        <option value="">--</option>
+                    </select>
+                </div>
+
+                <p class="queue-time-separator"><b>&colon;</b></p>
+
+                <div class="input-field queue-time-select">
+                    <select name="{{ form.end_m.html_name }}" id="{{ form.end_m.id_for_label }}">
+                        <option value="">--</option>
+                    </select>
+                </div>
+            </div>
+
+            <button class="btn waves-effect waves-light queue-btn" type="submit">Submit</button>
+        </form>
+    </div>
+
+
+    <script>
+        var date = document.getElementById("{{ form.date.id_for_label }}");
+        var start_hr = document.getElementById("{{ form.start_h.id_for_label }}");
+        var start_mn = document.getElementById("{{ form.start_m.id_for_label }}");
+        var end_hr = document.getElementById("{{ form.end_h.id_for_label }}");
+        var end_mn = document.getElementById("{{ form.end_m.id_for_label }}");
+
+        var start_options;
+        var end_options;
+
+        $(date).change(function (e) {
+            if(date.value){
+                var xhr = new XMLHttpRequest();
+                var v = date.value;
+                xhr.open("GET","{% url 'printerqueue:get_times' queue_id=qid date="" %}" + v);
+
+                xhr.onreadystatechange = function () {
+                    if(xhr.readyState === 4) {
+                        if (xhr.status === 200 || xhr.status === 0) {
+                            var json = JSON.parse(xhr.responseText);
+
+                            start_hr.innerHTML = "<option val=\"\">--</option>";
+                            start_mn.innerHTML = "<option val=\"\">--</option>";
+                            end_hr.innerHTML = "<option val=\"\">--</option>";
+                            end_mn.innerHTML = "<option val=\"\">--</option>";
+
+
+                            json.hours.forEach(function (e) {
+                                var node = document.createElement("option");
+                                var hr = e.substr(1);
+                                node.innerHTML = hr;
+                                node.value = hr;
+                                start_hr.appendChild(node);
+                            });
+
+                            $(start_hr).change(function () {
+                                var val = "h" + start_hr.value;
+
+                                var minutes = eval("json.minutes." + val);
+
+                                start_mn.innerHTML = "<option val=\"\">--</option>";
+                                start_mn.innerHTML = "<option val=\"\">--</option>";
+                                end_hr.innerHTML = "<option val=\"\">--</option>";
+                                end_mn.innerHTML = "<option val=\"\">--</option>";
+
+                                minutes.forEach(function(e){
+                                    var node = document.createElement("option");
+                                    var minute = e.substr(1);
+                                    node.innerHTML = minute;
+                                    node.value = minute;
+                                    start_mn.appendChild(node);
+                                });
+                            });
+                        }
+                    }
+                };
+
+                console.log("Sending request for start times");
+                xhr.send();
+            } else {
+                start_hr.innerHTML = "<option val=\"\">--</option>";
+                start_mn.innerHTML = "<option val=\"\">--</option>";
+                end_hr.innerHTML = "<option val=\"\">--</option>";
+                end_mn.innerHTML = "<option val=\"\">--</option>";
+            }
+        });
+
+    $(start_mn).change(function () {
+        $(end_hr).off("change");
+
+        var request = new XMLHttpRequest();
+        var start_time_str = start_hr.value + "-" + start_mn.value;
+        var date_str = date.value;
+        var json_end = null;
+
+        request.open("GET", "{% url 'printerqueue:get_end_times' queue_id=qid date="" time="" %}".slice(0, -1) + date_str + "/" + start_time_str);
+        request.onreadystatechange=function () {
+            if (request.readyState===4){
+                if(request.status===200||request.status===0){
+                    json_end = JSON.parse(request.responseText);
+
+                    end_hr.innerHTML = "<option val=\"\">--</option>";
+                    end_mn.innerHTML = "<option val=\"\">--</option>";
+
+                    console.log(json_end);
+                    json_end.hours.forEach(function (h) {
+                        var hour = h.substr(1);
+                        var node = document.createElement("option");
+
+                        node.innerHTML = hour;
+                        node.value = hour;
+                        end_hr.appendChild(node);
+
+                    });
+
+                    $(end_hr).on("change",function () {
+                        var val = "h"+end_hr.value;
+                        var min = eval("json_end.minutes." + val);
+
+                        end_mn.innerHTML = "<option val=\"\">--</option>";
+
+
+                        console.log(json_end);
+                        min.forEach(function(m){
+                            var minute = m.substr(1);
+                            var node = document.createElement("option");
+                            node.innerHTML = minute;
+                            node.value = minute;
+                            end_mn.appendChild(node);
+                        })
+                    });
+
+                }
+            }
+        };
+        console.log("Sending request for end times");
+        request.send();
+    });
+
+    </script>
+{% endblock content %}

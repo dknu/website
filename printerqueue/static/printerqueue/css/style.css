@@ -1,0 +1,21 @@
+.input-field select{
+    display: inline-block;
+    width: 70px;
+}
+
+.input-field .queue-time-select{
+    display: inline-block;
+}
+
+.queue-time-separator{
+    display: inline-block;
+}
+
+div.queue-time-select{
+    display: inline-block;
+}
+
+button.queue-btn{
+    display: block;
+    margin-top: 40px;
+}
