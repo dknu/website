@@ -12,14 +12,14 @@ class QueueForm(forms.Form):
     hidden = forms.BooleanField(required=False)
 
 class QueueObjectForm(forms.Form):
-    description = forms.CharField(required=False)
+    description = forms.CharField(required=False, max_length=64)
     file = forms.FileField(required=False)
 
     # Start- og sluttidspunkt
     date = forms.DateField(required=True)
-    start_h = forms.ChoiceField(required=True)
-    start_m = forms.ChoiceField(required=True)
-    end_h = forms.ChoiceField(required=True)
-    end_m = forms.ChoiceField(required=True)
+    start_h = forms.CharField(required=True)
+    start_m = forms.CharField(required=True)
+    end_h = forms.CharField(required=True)
+    end_m = forms.CharField(required=True)
 
 

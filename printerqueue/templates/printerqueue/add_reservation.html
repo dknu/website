@@ -4,65 +4,78 @@
     <link rel="stylesheet" href="{% static "printerqueue/css/style.css" %}">
 {% endblock head %}
 {% block content %}
-    <div class="content">
-        <form action="{% url 'printerqueue:add_to_queue' queue_id=qid %}" method="post" class="col s12" style="max-width: 1024px;margin: auto;">
+    <div class="content row ">
+    <div class="col s6 m5">
+    <div class="card-panel white">
+        <form action="{% url 'printerqueue:add_to_queue' queue_id=qid %}" method="post" class="" style="max-width: 1024px;margin: auto;" id="queue-reserve">
             {% csrf_token %}
             
             {% if include_description %}
-                <div class="input-field">
-                    <input type="text" name="{{ form.description.html_name }}" id="{{ form.description.id_for_label }}">
+                <div class="row">
+                <div class="input-field col s11">
+                    {{ form.description }}
                     <label for="{{ form.description.id_for_label }}">{{ form.description.label }}</label>
+                </div>
                 </div>
             {% endif %}
 
             {% if include_file %}
-                <div class="input-field">
-                    <input type="file" name="{{ form.file.html_name }}" id="{{ form.file.id_for_label }}">
-                    <label for="{{ form.file.id_for_label }}">{{ form.file.id_for_label }}</label>
+                <div class="row">
+                <div class="input-field col s11 file-field">
+                    <div class="btn">
+                        <span>{{ form.file.label }}</span>
+                        <input type="file" name="{{ form.file.html_name }}" id="{{ form.file.id_for_label }}">
+                    </div>
+                    <div class="file-path-wrapper">
+                        <input type="text" class="file-path validate">
+                    </div>
+                </div>
                 </div>
             {% endif %}
 
             <div class="input-field">
-                <input type="date" name="{{ form.date.html_name }}" id="{{ form.date.id_for_label }}">
-               <!-- <label for="{{ form.date.id_for_label }}">{{ form.date.label }}</label> -->
+                <input type="text" name="{{ form.date.html_name }}" id="{{ form.date.id_for_label }}" class="datepicker" required>
+                <label for="{{ form.date.id_for_label }}">{{ form.date.label }}</label>
             </div>
 
             <div class="row">
-                <p>Start</p>
-                <div class="input-field queue-time-select">
-                    <select name="{{ form.start_h.html_name }}" id="{{ form.start_h.id_for_label }}" style="display: inline-block">
+                <p class="col">Fra :</p>
+                <div class="input-field queue-time-select col s1">
+                    <select name="{{ form.start_h.html_name }}" id="{{ form.start_h.id_for_label }}">
                         <option value="" selected disabled>--</option>
                     </select>
                 </div>
 
-                <p class="queue-time-separator"><b>&colon;</b></p>
+                <p class="queue-time-separator col"><b>&colon;</b></p>
 
-                <div class="input-field queue-time-select">
-                    <select name="{{ form.start_m.html_name }}" id="{{ form.start_m.id_for_label }}" style="display:inline-block">
+                <div class="input-field queue-time-select col s1">
+                    <select name="{{ form.start_m.html_name }}" id="{{ form.start_m.id_for_label }}" >
                         <option value="" selected disabled>--</option>
                     </select>
                 </div>
             </div>
 
             <div class="row">
-                <p>End</p>
-                <div class="input-field queue-time-select">
+                <p class="col">Til :</p>
+                <div class="input-field queue-time-select col s1">
                     <select name="{{ form.end_h.html_name }}" id="{{ form.end_h.id_for_label }}">
                         <option value="">--</option>
                     </select>
                 </div>
 
-                <p class="queue-time-separator"><b>&colon;</b></p>
+                <p class="queue-time-separator col"><b>&colon;</b></p>
 
-                <div class="input-field queue-time-select">
+                <div class="input-field queue-time-select col s1">
                     <select name="{{ form.end_m.html_name }}" id="{{ form.end_m.id_for_label }}">
                         <option value="">--</option>
                     </select>
                 </div>
             </div>
 
-            <button class="btn waves-effect waves-light queue-btn" type="submit">Submit</button>
+            <button class="btn waves-effect waves-light queue-btn" type="submit" id="submit_btn">Submit</button>
         </form>
+    </div>
+    </div>
     </div>
 
 
@@ -75,6 +88,27 @@
 
         var start_options;
         var end_options;
+
+        $(document).ready(function () {
+            $('select').material_select();
+        });
+
+        $('.datepicker').pickadate({
+            selectMonths: true,
+            selectYears: 2,
+            today: 'I dag',
+            clear: 'Tilbakestill',
+            close: 'OK',
+            format: 'yyyy-mm-dd',
+            closeOnSelect: true,
+            onClose: function () {
+                $(date).change();
+            },
+            onSet: function () {
+                //$(date).change();
+            }
+        });
+
 
         $(date).change(function (e) {
             if(date.value){
@@ -101,6 +135,8 @@
                                 start_hr.appendChild(node);
                             });
 
+                            $('select').material_select();
+
                             $(start_hr).change(function () {
                                 var val = "h" + start_hr.value;
 
@@ -118,6 +154,9 @@
                                     node.value = minute;
                                     start_mn.appendChild(node);
                                 });
+
+                                $('select').material_select();
+
                             });
                         }
                     }
@@ -133,7 +172,7 @@
             }
         });
 
-    $(start_mn).change(function () {
+        $(start_mn).change(function () {
         $(end_hr).off("change");
 
         var request = new XMLHttpRequest();
@@ -150,7 +189,6 @@
                     end_hr.innerHTML = "<option val=\"\">--</option>";
                     end_mn.innerHTML = "<option val=\"\">--</option>";
 
-                    console.log(json_end);
                     json_end.hours.forEach(function (h) {
                         var hour = h.substr(1);
                         var node = document.createElement("option");
@@ -161,21 +199,23 @@
 
                     });
 
+                    $('select').material_select();
+
                     $(end_hr).on("change",function () {
                         var val = "h"+end_hr.value;
                         var min = eval("json_end.minutes." + val);
 
                         end_mn.innerHTML = "<option val=\"\">--</option>";
 
-
-                        console.log(json_end);
                         min.forEach(function(m){
                             var minute = m.substr(1);
                             var node = document.createElement("option");
                             node.innerHTML = minute;
                             node.value = minute;
                             end_mn.appendChild(node);
-                        })
+                        });
+
+                        $('select').material_select();
                     });
 
                 }
@@ -184,6 +224,21 @@
         console.log("Sending request for end times");
         request.send();
     });
+
+        $("#submit_btn").submit(function (e) {
+            e.preventDefault();
+
+            var dt = date.value!=null&&date.value!="";
+            var sh = start_hr.value!=null&&start_hr.value!="";
+            var sm = start_mn.value!=null&&start_mn.value!="";
+            var eh = end_hr.value!=null&&end_hr.value!="";
+            var em = end_mn!=null&&end_mn.value!="";
+
+            if(dt&&sh&&sm&&eh&&em){
+                $("#queue-reserve").submit();
+            }
+
+        })
 
     </script>
 {% endblock content %}

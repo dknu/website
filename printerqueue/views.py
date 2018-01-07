@@ -1,12 +1,14 @@
 import json
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, time
 from django.contrib.auth.decorators import login_required, permission_required
 from django.core.urlresolvers import reverse
-from django.http import HttpResponse, HttpResponseRedirect, Http404
+from django.http import HttpResponse, HttpResponseRedirect, Http404, HttpResponseBadRequest
 from django.shortcuts import render, redirect, get_object_or_404
 
 from printerqueue.forms import QueueForm, QueueObjectForm
 from printerqueue.models import Queue, QueueObject
+
+
 
 
 def index(request):
@@ -29,8 +31,7 @@ def all_queues(request):
     return render(request, 'printerqueue/all.html', context)
 
 
-def error(request):
-    pass
+# TODO: Kan legge in dager HS køene ikke er åpne
 
 @permission_required('can_create_queue')
 def create(request):
@@ -55,7 +56,7 @@ def create(request):
             return HttpResponseRedirect(reverse('printerqueue:view', kwargs={'queue_id':queue.id}))
 
         else:
-            raise Http404("Invalid form")
+            raise Http404("Invalid Form")
     else:
         form = QueueForm()
         button_message = "Submit"
@@ -78,7 +79,12 @@ def add_to_queue(request, queue_id):
 
         if form.is_valid():
             current_user = request.user
-            queue = get_object_or_404(pk=queue_id)
+            queue = get_object_or_404(Queue,pk=queue_id)
+
+            start_time = time(hour=int(form.cleaned_data["start_h"]),minute=int(form.cleaned_data["start_m"]))
+            end_time = time(hour=int(form.cleaned_data["end_h"]), minute=int(form.cleaned_data["end_m"]))
+
+            # TODO check that the time is valid
 
             object = QueueObject(
                 user=current_user,
@@ -86,16 +92,16 @@ def add_to_queue(request, queue_id):
                 queue=queue,
                 file=form.cleaned_data["file"] if queue.include_file else None,
                 date=form.cleaned_data["date"],
-                start=form.cleaned_data["start"],
-                end=form.cleaned_data["end"]
+                start=start_time,
+                end=end_time
             )
 
             object.save()
 
-            return HttpResponseRedirect(reverse('printerqueue:view', kwargs={{'queue_id':queue.id}}))
+            return HttpResponseRedirect(reverse('printerqueue:view', kwargs={'queue_id':queue.id}))
 
         else:
-            Http404("Invalid form")
+            return HttpResponse(form.errors)
     else:
 
         form = QueueObjectForm()
@@ -109,6 +115,7 @@ def add_to_queue(request, queue_id):
         }
 
         return render(request, 'printerqueue/add_reservation.html', context)
+
 
 
 def open_times(slots, date):
@@ -207,7 +214,7 @@ def show(request, queue_id):
     if queue_id.isalnum():
         queue = get_object_or_404(Queue, pk=queue_id)
         objects = []
-        for object in queue.queueobjects.all():
+        for object in queue.queueobjects.all().order_by('date','end'):
             objects.append(str(object))
 
         context = {

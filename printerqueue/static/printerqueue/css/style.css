@@ -1,14 +1,6 @@
-.input-field select{
-    display: inline-block;
-    width: 70px;
-}
-
-.input-field .queue-time-select{
-    display: inline-block;
-}
-
 .queue-time-separator{
     display: inline-block;
+    font-size: larger;
 }
 
 div.queue-time-select{
@@ -18,4 +10,21 @@ div.queue-time-select{
 button.queue-btn{
     display: block;
     margin-top: 40px;
+}
+
+.input-field .datepicker{
+    width: 140px;
+}
+
+.row p{
+    display: inline-block;
+}
+
+select{
+    display: none;
+}
+
+.content>div{
+    margin: auto !important;
+    position: static;
 }
