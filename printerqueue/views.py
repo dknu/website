@@ -70,7 +70,19 @@ def create(request):
         return render(request, 'printerqueue/add_queue.html', render_context)
 
 
+def verify_submitted(obj: QueueObject):
+    queue = obj.queue
+    slots = queue.get_times_for_day(obj.date)
+    print(slots)
 
+    for s,e in slots:
+        if (
+            obj.start >= s and
+            obj.end   <= e and
+            obj. start < obj.end
+        ):
+            return True
+    return False
 
 @login_required()
 def add_to_queue(request, queue_id):
@@ -96,9 +108,12 @@ def add_to_queue(request, queue_id):
                 end=end_time
             )
 
-            object.save()
-
-            return HttpResponseRedirect(reverse('printerqueue:view', kwargs={'queue_id':queue.id}))
+            if verify_submitted(object):
+                object.save()
+                return HttpResponseRedirect(reverse('printerqueue:view', kwargs={'queue_id':queue.id}))
+            else:
+                # TODO Send bruker tilbake til skjema med feilmelding
+                return HttpResponse("The data you submittet was not valid")
 
         else:
             return HttpResponse(form.errors)
@@ -115,7 +130,6 @@ def add_to_queue(request, queue_id):
         }
 
         return render(request, 'printerqueue/add_reservation.html', context)
-
 
 
 def open_times(slots, date):
