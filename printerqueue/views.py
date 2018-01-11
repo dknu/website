@@ -1,14 +1,12 @@
 import json
-from datetime import datetime, timedelta, time
+from datetime import datetime, timedelta, time, date
 from django.contrib.auth.decorators import login_required, permission_required
 from django.core.urlresolvers import reverse
-from django.http import HttpResponse, HttpResponseRedirect, Http404, HttpResponseBadRequest
-from django.shortcuts import render, redirect, get_object_or_404
+from django.http import HttpResponse, HttpResponseRedirect, Http404
+from django.shortcuts import render, get_object_or_404
 
 from printerqueue.forms import QueueForm, QueueObjectForm
 from printerqueue.models import Queue, QueueObject
-
-
 
 
 def index(request):
@@ -42,13 +40,13 @@ def create(request):
             form.clean()
 
             queue = Queue(
-                name = form.cleaned_data["name"],
-                description = form.cleaned_data["description"],
-                include_file = form.cleaned_data["include_file"],
+                name=form.cleaned_data["name"],
+                description=form.cleaned_data["description"],
+                include_file=form.cleaned_data["include_file"],
                 include_description=form.cleaned_data["include_description"],
                 allowed_time_start=form.cleaned_data["time_start"],
                 allowed_time_end=form.cleaned_data["time_end"],
-                hidden = form.cleaned_data["hidden"]
+                hidden=form.cleaned_data["hidden"]
             )
 
             queue.save()
@@ -96,8 +94,6 @@ def add_to_queue(request, queue_id):
             start_time = time(hour=int(form.cleaned_data["start_h"]),minute=int(form.cleaned_data["start_m"]))
             end_time = time(hour=int(form.cleaned_data["end_h"]), minute=int(form.cleaned_data["end_m"]))
 
-            # TODO check that the time is valid
-
             object = QueueObject(
                 user=current_user,
                 description=form.cleaned_data["description"],
@@ -122,11 +118,16 @@ def add_to_queue(request, queue_id):
         form = QueueObjectForm()
         queue = get_object_or_404(Queue,pk=queue_id)
 
+        intervals = queue.all_slots(day=date.today(), open_message="Ledig")
+
         context = {
             'qid':queue_id,
             'include_description':queue.include_description,
             'include_file':queue.include_file,
-            'form':form
+            'form':form,
+            'intervals':intervals,
+            'can_reserve': False
+
         }
 
         return render(request, 'printerqueue/add_reservation.html', context)
@@ -231,10 +232,15 @@ def show(request, queue_id):
         for object in queue.queueobjects.all().order_by('date','end'):
             objects.append(str(object))
 
+        ints = queue.all_slots(day=date.today(), open_message="Ledig")
+
         context = {
             'name':queue.name,
             'description':queue.description,
-            'objects':objects
+            'objects':objects,
+            'can_reserve':True,
+            'qid': queue.id,
+            'intervals':ints
         }
 
         return render(request, 'printerqueue/view.html', context)

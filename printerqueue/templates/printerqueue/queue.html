@@ -1,0 +1,33 @@
+
+
+<div class="queue-listing">
+    <ul>
+        {% for interval in intervals %}
+
+            <li class="queue-listing-item">
+                {% if can_reserve and interval.is_open %}
+                <a href="{% url 'printerqueue:add_to_queue' queue_id=qid %}">
+                {% endif %}
+
+                <p class="queue-start">{{ interval.start }}</p>
+                {% if interval.is_open %}
+
+                    <p class="queue-message">{{ interval.message }}</p>
+
+                {% else %}
+
+                    <p class="queue-user">{{ interval.user }}</p>
+                    <p class="queue-description">{{ interval.description }}</p>
+
+                {% endif %}
+
+                <p class="queue-end">{{ interval.end }}</p>
+
+                {% if can_reserve and interval.is_open %}
+                </a>
+                {% endif %}
+            </li>
+
+        {% endfor %}
+    </ul>
+</div>

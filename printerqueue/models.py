@@ -51,6 +51,39 @@ class Queue(models.Model):
             prev = obj.end
         return open_slots
 
+    def all_slots(self, day, open_message="Open"):
+        open = list(
+            map(
+                lambda s: {
+                    'start':s[0],
+                    'end': s[1],
+                    'is_open':True,
+                    'message':open_message
+                },
+                self.get_times_for_day(day)
+            )
+        )
+
+        reserved = list(
+            map(
+                lambda o: {
+                    'start': o.start,
+                    'end': o.end,
+                    'is_open': False,
+                    'user': o.user,
+                    'description': o.description
+                },
+                self.queueobjects.filter(date=day)
+            )
+        )
+
+        all = sorted(list(open+reserved), key=lambda s: s['start'])
+        for i in range(len(all)):
+            all[i]['start'] = str(all[i]['start'])
+            all[i]['end'] = str(all[i]['end'])
+
+        return all
+
 
     def __str__(self):
         return str(self.name)

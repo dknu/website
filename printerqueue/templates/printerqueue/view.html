@@ -1,4 +1,10 @@
 {% extends 'base.html' %}
+{% load staticfiles %}
+{% load queue %}
+
+{% block head %}
+    <link rel="stylesheet" href="{% static "printerqueue/css/style.css" %}">
+{% endblock head %}
 
 {% block content %}
     <h1>{{ name }}</h1>
@@ -6,12 +12,8 @@
         {{ description }}
     </p>
 
-    <ul>
-        {% for o in objects %}
-            <li>
-                {{ o }}
-            </li>
-        {% endfor %}
-    </ul>
+    {% queue_list can_reserve qid intervals %}
+
+
 
 {% endblock content %}

@@ -28,3 +28,26 @@ select{
     margin: auto !important;
     position: static;
 }
+
+.queue-listing-item{
+    background: #fff;
+    margin: 0;
+    width: 270px;
+}
+
+.queue-listing-item p{
+    margin: 0 5px;
+}
+
+.queue-listing-item:hover{
+    background: #ebebeb;
+}
+
+.queue-listing ul{
+    width: fit-content;
+    border: 1px solid #999;
+}
+
+.queue-listing{
+    margin: auto;
+}
