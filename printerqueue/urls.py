@@ -9,7 +9,7 @@ urlpatterns=[
     url(r'^all$', views.all_queues, name="all"),
     url(r'^create$', views.create, name="create"),
     url(r'^(?P<queue_id>.+)/', include([
-        url(r'^view$', views.show, name="view"),
+        url(r'^view$', views.show, name="show"),
         url(r'^add$', views.add_to_queue, name="add")
     ])),
     url(r'^gettimes/(?P<queue_id>[0-9]+)/(?P<date>.*)$', views.get_times, name="get_times"),

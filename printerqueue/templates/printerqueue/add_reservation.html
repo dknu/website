@@ -8,7 +8,7 @@
     <div class="content row ">
     <div class="col s6 m5">
     <div class="card-panel white">
-        <form action="{% url 'printerqueue:add_to_queue' queue_id=qid %}" method="post" class="" style="max-width: 1024px;margin: auto;" id="queue-reserve">
+        <form action="{% url 'printerqueue:add' queue_id=qid %}" method="post" class="" style="max-width: 1024px;margin: auto;" id="queue-reserve">
             {% csrf_token %}
             
             {% if include_description %}
@@ -234,10 +234,10 @@
             e.preventDefault();
 
             var dt = date.value!=null&&date.value!="";
-            var sh = start_hr.value!=null&&start_hr.value!="";
-            var sm = start_mn.value!=null&&start_mn.value!="";
-            var eh = end_hr.value!=null&&end_hr.value!="";
-            var em = end_mn!=null&&end_mn.value!="";
+            var sh = start_hr.value!=null&&start_hr.value!=""&&start_hr.value!="--";
+            var sm = start_mn.value!=null&&start_mn.value!=""&&start_mn.value!="--";
+            var eh = end_hr.value!=null&&end_hr.value!=""&&end_hr.value!="--";
+            var em = end_mn!=null&&end_mn.value!=""&&end_hr.value!="--";
 
             if(dt&&sh&&sm&&eh&&em){
                 $("#queue-reserve").submit();

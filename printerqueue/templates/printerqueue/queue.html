@@ -6,7 +6,7 @@
 
             <li class="queue-listing-item">
                 {% if can_reserve and interval.is_open %}
-                <a href="{% url 'printerqueue:add_to_queue' queue_id=qid %}">
+                <a href="{% url 'printerqueue:add' queue_id=qid %}">
                 {% endif %}
 
                 <p class="queue-start">{{ interval.start }}</p>

@@ -51,7 +51,7 @@ def create(request):
 
             queue.save()
 
-            return HttpResponseRedirect(reverse('printerqueue:view', kwargs={'queue_id':queue.id}))
+            return HttpResponseRedirect(reverse('printerqueue:show', kwargs={'queue_id':queue.id}))
 
         else:
             raise Http404("Invalid Form")
@@ -106,7 +106,7 @@ def add_to_queue(request, queue_id):
 
             if verify_submitted(object):
                 object.save()
-                return HttpResponseRedirect(reverse('printerqueue:view', kwargs={'queue_id':queue.id}))
+                return HttpResponseRedirect(reverse('printerqueue:show', kwargs={'queue_id':queue.id}))
             else:
                 # TODO Send bruker tilbake til skjema med feilmelding
                 return HttpResponse("The data you submittet was not valid")
@@ -235,12 +235,12 @@ def show(request, queue_id):
         ints = queue.all_slots(day=date.today(), open_message="Ledig")
 
         context = {
-            'name':queue.name,
-            'description':queue.description,
-            'objects':objects,
-            'can_reserve':True,
+            'name': queue.name,
+            'description': queue.description,
+            'objects': objects,
+            'can_reserve': True,
             'qid': queue.id,
-            'intervals':ints
+            'intervals': ints
         }
 
         return render(request, 'printerqueue/view.html', context)
