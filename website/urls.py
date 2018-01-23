@@ -38,7 +38,8 @@ urlpatterns = [
     url(r'^members/', include('userprofile.urls')),
     url(r'^vaktliste/', include('vaktliste.urls', namespace='vaktliste')),
     url(r'^feide/', include('authentication_feide.urls')),
-    url(r'^ajax/setcookie', set_cookie, name='set_cookie')
+    url(r'^ajax/setcookie', set_cookie, name='set_cookie'),
+    url(r'^project/', include('project.urls'))
 ]
 
 if settings.DEBUG:
