@@ -32,7 +32,7 @@ class Queue(models.Model):
         open_slots = []
 
         endobj = QueueObject(
-            user=get_object_or_404(User,pk=3),
+            user=None,
             queue=self,
             file=None,
 
@@ -89,7 +89,7 @@ class Queue(models.Model):
         return str(self.name)
 
 class QueueObject(models.Model):
-    user = ForeignKey(User)
+    user = ForeignKey(User, null=True)
     submitted_date = DateTimeField(auto_now=True)
     description = CharField(max_length=64)
     queue = ForeignKey(Queue, related_name='queueobjects')
