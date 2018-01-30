@@ -84,6 +84,11 @@ class Queue(models.Model):
 
         return all
 
+    def update(self):
+
+        for queue in list(self.queueobjects):
+            queue.update()
+
 
     def __str__(self):
         return str(self.name)
@@ -98,6 +103,15 @@ class QueueObject(models.Model):
     date = DateField(default=timezone.now)
     start = TimeField(default=timezone.now)
     end = TimeField(default=timezone.now)
+
+    active = BooleanField(default=True)
+
+    def update(self):
+
+        # Update active-status
+        dt_now = timezone.now()
+        if (datetime.combine(self.date,self.end) < dt_now):
+            self.active = False
 
     def __str__(self):
         return str(self.user.get_full_name()) + " : " + str(self.date) + "[ " + str(self.start) + " - " + str(self.end) + " ]"
