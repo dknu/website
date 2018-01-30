@@ -26,7 +26,7 @@ class Queue(models.Model):
 
     # Finn ledige tidsintervaller for en dag
     def get_times_for_day(self, day):
-
+        self.update()
         reservations = list(self.queueobjects.filter(date=day).order_by('start'))
 
         open_slots = []
@@ -47,11 +47,19 @@ class Queue(models.Model):
         for obj in reservations:
             td = datetime.combine(day,obj.start) - datetime.combine(day,prev)
             if td.total_seconds() > 0:
+
+                # TODO: New datetime object rounded DOWN to this quarter. If object in interval, set interval start to object
+                # TODO: if interval ends before object, exclude interval.
+
                 open_slots.append((prev,obj.start))
             prev = obj.end
         return open_slots
 
     def all_slots(self, day, open_message="Open"):
+        self.update()
+
+        # TODO: Mark or exclude inactive (passed) objects.
+
         open = list(
             map(
                 lambda s: {
@@ -86,7 +94,7 @@ class Queue(models.Model):
 
     def update(self):
 
-        for queue in list(self.queueobjects):
+        for queue in list(self.queueobjects.all()):
             queue.update()
 
 
