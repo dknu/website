@@ -246,3 +246,18 @@ def show(request, queue_id):
         return render(request, 'printerqueue/view.html', context)
     else:
         return HttpResponseRedirect(reverse('printerqueue:index'))
+
+
+def update_queue_list(request):
+    if request.method == "GET":
+        try:
+
+            ctx = {
+                'queue_id':int(request.GET.queue_id),
+                'date': datetime.strptime(request.GET.date, "%Y-%m-%d").date(),
+                'can_reserve': bool(request.GET.reserve)
+            }
+
+            return render(request,'printerqueue/queue_data.html', ctx)
+        except:
+            HttpResponse("GET data not valid")
