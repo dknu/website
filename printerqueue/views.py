@@ -10,7 +10,23 @@ from printerqueue.models import Queue, QueueObject
 
 
 def index(request):
-    context = {"debug":"Debug message"}
+
+
+
+
+    queues = list(Queue.objects.all())[-3:] # Henter kun de tre nyeste queuene
+    queue_ids = map(lambda q: {'id': q.id,
+                                'intervals': (q.all_slots(day=date.today()
+                                                          , open_message="Ledig")),
+                               'name': q.name,
+                               },
+                    list(queues))
+
+    context = {"debug":"Debug message",
+               "lists": queue_ids,
+               "can_reserve": True,
+               }
+
     return render(request, 'printerqueue/landing.html', context)
 
 def all_queues(request):
