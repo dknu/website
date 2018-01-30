@@ -11,9 +11,6 @@ from printerqueue.models import Queue, QueueObject
 
 def index(request):
 
-
-
-
     queues = list(Queue.objects.all())[-3:] # Henter kun de tre nyeste queuene
     queue_ids = map(lambda q: {'id': q.id,
                                 'intervals': (q.all_slots(day=date.today()

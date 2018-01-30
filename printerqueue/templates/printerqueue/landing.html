@@ -25,12 +25,11 @@
             <div class="col s4">
                     <div class="card-panel white">
                         <span class="black-text">{{ queue.name }}</span>
-                        {% queue_list queue.id can_reserve queue.intervals %}
+                        {% queue_list can_reserve queue.id %}
                     </div>
             </div>
           {% endfor %}
        </div>
-    <p>{{ debug }}</p>
 </div>
 </div>
 
